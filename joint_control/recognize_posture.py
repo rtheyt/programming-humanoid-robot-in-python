@@ -27,7 +27,7 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
         self.posture = 'unknown'
         # LOAD YOUR CLASSIFIER
         ROBOT_POSE_CLF = 'robot_pose.pkl'
-        with open(ROBOT_POSE_CL, 'rb') as fichier:
+        with open(ROBOT_POSE_CLF, 'rb') as fichier:
             self.posture_classifier = pickle.load(fichier) 
 
 
@@ -56,7 +56,7 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
         ROBOT_POSE_DATA_DIR = 'robot_pose_data' 
         classes = listdir(ROBOT_POSE_DATA_DIR)
         posture = classes[pose_predicted]
-        
+
         return posture
 
 if __name__ == '__main__':
