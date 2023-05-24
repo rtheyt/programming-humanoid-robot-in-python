@@ -51,7 +51,7 @@ class AngleInterpolationAgent(PIDAgent):
                 if (times[joint_i][key_frames] < curr_time < times[joint_i][len(times[joint_i])-1]):
                     target_joints[j_name] = self.bezier_calculation(joint_i, key_frames, curr_time, keyframes)
 
-        if 'LHipYawPitch' in target_joints: #if Left Hip has a value then copy to right hip
+        if 'LHipYawPitch' in target_joints: #if Left Hip has a value then copy to right one
             target_joints['RHipYawPitch'] = target_joints['LHipYawPitch']
 
         return target_joints
