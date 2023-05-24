@@ -13,7 +13,8 @@ import numpy as np
 from angle_interpolation import AngleInterpolationAgent
 from keyframes import *
 import pickle 
-from os import listdir 
+import os
+import sklearn
 
 
 
@@ -27,7 +28,7 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
         self.posture = 'unknown'
         # LOAD YOUR CLASSIFIER
         ROBOT_POSE_CLF = 'robot_pose.pkl'
-        self.dir = os.path.dirname(_file_) 
+        self.dir = os.path.dirname(__file__) 
         robot_pose_pkl_path = os.path.join(self.dir, ROBOT_POSE_CLF)  
         self.posture_classifier = pickle.load(open(robot_pose_pkl_path, 'rb'))
 
@@ -56,7 +57,7 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
         ROBOT_POSE_DATA_DIR = 'robot_pose_data' 
         classes = listdir(ROBOT_POSE_DATA_DIR)
         posture = classes[pose_predicted]
-
+        #test print(posture)
         return posture
 
 if __name__ == '__main__':
