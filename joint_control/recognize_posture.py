@@ -9,9 +9,12 @@
 
 '''
 
-
+import numpy as np
 from angle_interpolation import AngleInterpolationAgent
-from keyframes import hello
+from keyframes import *
+import pickle 
+from os import listdir 
+
 
 
 class PostureRecognitionAgent(AngleInterpolationAgent):
@@ -22,7 +25,11 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
                  sync_mode=True):
         super(PostureRecognitionAgent, self).__init__(simspark_ip, simspark_port, teamname, player_id, sync_mode)
         self.posture = 'unknown'
-        self.posture_classifier = None  # LOAD YOUR CLASSIFIER
+        # LOAD YOUR CLASSIFIER
+        ROBOT_POSE_CLF = 'robot_pose.pkl'
+        with open(ROBOT_POSE_CL, 'rb') as fichier:
+            self.posture_classifier = pickle.load(fichier) 
+
 
     def think(self, perception):
         self.posture = self.recognize_posture(perception)
@@ -31,7 +38,25 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
     def recognize_posture(self, perception):
         posture = 'unknown'
         # YOUR CODE HERE
+        
+        joint_list = ['LHipYawPitch', 'LHipRoll', 'LHipPitch', 'LKneePitch', 'RHipYawPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch']
+        angles_data = np.array()
 
+        for i in joint_list:
+          angles_data = np.append(angles_data, perception.joint[i])
+
+        #adding the values of AngleX and AngleY manually
+        angles_data = np.append(angles_data, perception.imu[0]) 
+        angles_data = np.append(angles_data, perception.imu[1]) 
+        #changing the shape of array angles data from 1d to 2d so it can be used with predict
+        angles_data = angles_data.reshape((-1,1))
+        #prediction of the pose
+        pose_predicted = self.posture_classifier.predict(angles_data)
+        #copied from learn_posture.ipynb
+        ROBOT_POSE_DATA_DIR = 'robot_pose_data' 
+        classes = listdir(ROBOT_POSE_DATA_DIR)
+        posture = classes[pose_predicted]
+        
         return posture
 
 if __name__ == '__main__':
