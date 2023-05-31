@@ -14,7 +14,7 @@ from angle_interpolation import AngleInterpolationAgent
 from keyframes import *
 import pickle 
 import os
-import sklearn
+
 
 
 
@@ -55,7 +55,7 @@ class PostureRecognitionAgent(AngleInterpolationAgent):
         pose_predicted = self.posture_classifier.predict(angles_data)
         #copied from learn_posture.ipynb
         ROBOT_POSE_DATA_DIR = 'robot_pose_data' 
-        classes = listdir(ROBOT_POSE_DATA_DIR)
+        classes = os.listdir(ROBOT_POSE_DATA_DIR)
         posture = classes[pose_predicted]
         #test print(posture)
         return posture
